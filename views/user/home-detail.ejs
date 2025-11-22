@@ -1,60 +1,164 @@
 <%- include ('../partials/head') %>
- 
-<body class="min-h-screen flex flex-col bg-red-50">
-  <!-- Top navbar -->
-  <%- include ('../partials/nav') %>
+<%- include ('../partials/nav') %>
 
-  <!-- Main content -->
-  <main class="flex-grow px-6 py-8 text-red-900">
-    <!-- Heading -->
-    <h1 class="text-4xl font-bold text-red-700 mb-8 text-center">
-      Detailed Information of StayEasy home:
-    </h1> 
-
-    <!-- Full-width content section -->
-    <section class="bg-white rounded-2xl shadow-md p-8 flex flex-col lg:flex-row items-center lg:items-start gap-8 max-w-6xl mx-auto">
-      <!-- Image -->
-      
-        <img src="<%= home.photoUrl %>" alt="<%= home.houseName %>" 
-        class="w-full lg:w-1/2 h-80 object-cover rounded-lg shadow"
+<div class="bg-gradient-to-br from-red-50 via-white to-pink-50 min-h-screen py-10 px-4 flex items-center justify-center">
+  
+  <div class="bg-white shadow-lg rounded-2xl overflow-hidden w-full max-w-lg flex flex-col">
+    <div class="w-full md:w-1/2 relative group overflow-hidden h-80 md:h-auto">
+      <img 
+        src="/<%= home.photoUrl %>" 
+        alt="<%= home.housename %>" 
+        class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
       />
-
-      <!-- Text Content -->
-      <div class="w-full lg:w-1/2 space-y-4">
-        <h2 class="text-3xl font-bold text-red-700"><%= home.housename %></h2>
-
-        <p class="text-lg text-gray-700">
-          <span class="font-semibold text-red-700">Address:</span> <%= home.address %>
-        </p>
-
-        <p class="text-lg text-gray-700">
-          <span class="font-semibold text-red-700">House No.:</span> <%= home.housenumber %>
-        </p>
-
-        <p class="text-lg text-gray-700">
-          <span class="font-semibold text-red-700">Price/Night:</span> ₹<%= home.price %>
-        </p>
-
-        <p class="text-lg text-gray-700">
-          <span class="font-semibold text-red-700">Facilities:</span> <%= home.facilities %>
-        </p>
-
-        <p class="text-lg text-gray-700 flex items-center gap-2">
-          <span class="text-yellow-400"><i class="fas fa-star"></i></span>
-          <%= home.rating %> stars
-        </p>
-        <div class="mt-2">
-          <%- include ('../partials/favorites') %> </div>
-          <div class="mt-4">
-  <a href="/rules/<%= home._id %>" class="inline-flex items-center text-blue-600 hover:text-blue-800">
-    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-    </svg>
-    Download House Rules
-  </a>
-</div>
-        
+      
+      <div class="absolute top-3 right-3 bg-white px-2 py-1 rounded-full shadow text-sm font-semibold flex items-center gap-1">
+        <i class="fas fa-star text-yellow-400"></i>
+        <%= home.rating %>
       </div>
-    </section>
-  </main>
-</body>
+      
+      <div class="absolute bottom-3 left-3 bg-black/60 text-white px-2 py-1 rounded text-xs uppercase font-bold tracking-wide backdrop-blur-sm">
+        <%= home.venueType || 'Venue' %>
+      </div>
+    </div>
+
+    <div class="p-8 w-full md:w-1/2 flex flex-col justify-center">
+      
+      <h1 class="text-3xl font-bold text-red-700 mb-4"><%= home.housename %></h1>
+      
+      <div class="space-y-3 mb-6">
+        
+        <p class="text-base text-gray-600">
+          <span class="font-semibold text-gray-700"><i class="fas fa-map-marker-alt mr-2 w-5 text-center"></i>Address:</span> <%= home.address %>
+        </p>
+
+        <p class="text-base text-gray-600">
+          <span class="font-semibold text-gray-700"><i class="fas fa-users mr-2 w-5 text-center"></i>Capacity:</span> <%= home.capacity %> Guests
+        </p>
+
+        <p class="text-base text-gray-600">
+          <span class="font-semibold text-gray-700"><i class="fas fa-tag mr-2 w-5 text-center"></i>Price/Day:</span> ₹<%= home.price %>
+        </p>
+
+        <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 mt-2">
+          <p class="text-sm text-gray-500 italic">
+            <span class="font-semibold text-gray-700 not-italic block mb-1">Features:</span> 
+            <%= home.facilities %>
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-auto space-y-3">
+        
+        <a href="/book/<%= home._id %>" 
+           class="block w-full bg-red-600 text-white font-semibold py-3 rounded-lg text-center shadow hover:bg-red-700 transition transform hover:-translate-y-0.5">
+           Book This Venue
+        </a>
+
+        <div class="flex gap-3">
+          <form action="/favourites" method="POST" class="flex-1">
+            <input type="hidden" name="id" value="<%= home._id %>">
+            <button type="submit" class="w-full bg-white border border-red-200 text-red-700 font-semibold py-2.5 rounded-lg hover:bg-red-50 transition flex items-center justify-center gap-2 shadow-sm">
+              <i class="far fa-heart"></i> Favorites
+            </button>
+          </form>
+
+          <% if (home.rulesPdfUrl) { %>
+            <a href="/rules/<%= home._id %>" class="flex-1 bg-white border border-blue-200 text-blue-600 font-semibold py-2.5 rounded-lg hover:bg-blue-50 transition text-center flex items-center justify-center gap-2 shadow-sm">
+              <i class="fas fa-file-pdf"></i> Rules
+            </a>
+          <% } %>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="chat-widget" class="fixed bottom-5 right-5 z-50 font-sans">
+  
+  <div id="chat-window" class="hidden bg-white w-80 h-96 rounded-2xl shadow-2xl flex flex-col border border-gray-200 mb-4 overflow-hidden transition-all transform origin-bottom-right duration-300">
+    <div class="bg-red-700 text-white p-4 flex justify-between items-center shadow-md">
+      <h3 class="font-bold text-sm flex items-center gap-2"><i class="fas fa-robot"></i> Ask about <%= home.housename %></h3>
+      <button onclick="toggleChat()" class="text-white hover:text-gray-200"><i class="fas fa-times"></i></button>
+    </div>
+    <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-gray-50 space-y-3 text-sm">
+      <div class="bg-white p-3 rounded-lg rounded-tl-none shadow-sm border border-gray-200 self-start text-gray-700 max-w-[90%]">
+        Hello! I know the facilities and rules for <strong><%= home.housename %></strong>. Ask me anything!
+      </div>
+    </div>
+    <div class="p-3 bg-white border-t border-gray-100 flex gap-2">
+      <input type="text" id="user-input" placeholder="Ask a question..." class="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-red-500">
+      <button onclick="sendMessage()" id="send-btn" class="bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-red-700 shadow-md transition"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <button onclick="toggleChat()" class="bg-red-600 hover:bg-red-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl transition-transform hover:scale-110">
+    <i class="fas fa-comment-dots"></i>
+  </button>
+</div>
+
+<script>
+  const homeId = "<%= home._id %>";
+  const chatWindow = document.getElementById('chat-window');
+  const messagesContainer = document.getElementById('chat-messages');
+  const userInput = document.getElementById('user-input');
+  const sendBtn = document.getElementById('send-btn');
+
+  function toggleChat() {
+    chatWindow.classList.toggle('hidden');
+    if (!chatWindow.classList.contains('hidden')) userInput.focus();
+  }
+
+  async function sendMessage() {
+    const message = userInput.value.trim();
+    if (!message) return;
+    userInput.disabled = true;
+    sendBtn.disabled = true;
+    addMessage(message, 'user');
+    userInput.value = '';
+    const typingId = addMessage('Thinking...', 'bot', true);
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ homeId: homeId, userMessage: message })
+      });
+      const data = await response.json();
+      removeMessage(typingId);
+      addMessage(data.reply, 'bot');
+    } catch (error) {
+      removeMessage(typingId);
+      addMessage("Error connecting to AI.", 'bot');
+    } finally {
+      userInput.disabled = false;
+      sendBtn.disabled = false;
+      userInput.focus();
+    }
+  }
+
+  function addMessage(text, sender, isTyping = false) {
+    const div = document.createElement('div');
+    div.id = Date.now();
+    if (sender === 'user') {
+      div.className = "bg-red-600 text-white p-3 rounded-lg rounded-tr-none shadow-sm self-end ml-auto max-w-[85%]";
+    } else {
+      div.className = "bg-white text-gray-800 p-3 rounded-lg rounded-tl-none shadow-sm border border-gray-200 mr-auto max-w-[85%]";
+      if (isTyping) div.classList.add('italic', 'text-gray-500');
+    }
+    div.innerHTML = text.replace(/\n/g, '<br>');
+    messagesContainer.appendChild(div);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    return div.id;
+  }
+
+  function removeMessage(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+
+  userInput.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') sendMessage();
+  });
+</script>

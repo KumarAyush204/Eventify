@@ -119,8 +119,9 @@ exports.getEditHome = (req, res, next) => {
   });
 };
 
+// controllers/hostController.js
+
 exports.postEditHome = (req, res, next) => {
-  // UPDATED: Destructuring new fields
   const { 
     id, 
     housename, 
@@ -129,8 +130,8 @@ exports.postEditHome = (req, res, next) => {
     rating, 
     facilities, 
     hostEmail,
-    capacity,    // NEW
-    venueType    // NEW
+    capacity,    
+    venueType    
   } = req.body;
 
   const images = req.files && req.files.photoUrl;        
@@ -144,45 +145,36 @@ exports.postEditHome = (req, res, next) => {
 
       home.housename = housename;
       home.address = address;
-      // Removed housenumber assignment
-      home.capacity = capacity;     // NEW
-      home.venueType = venueType;   // NEW
+      home.capacity = capacity;
+      home.venueType = venueType;
       home.price = price;
       home.rating = rating;
       home.facilities = facilities;
       home.hostEmail = hostEmail;
 
-      // If a new image was uploaded, delete old and set new one
+      // 1. Handle Image Update
       if (images && images.length > 0) {
-        if (home.photoUrl) {
-          fs.unlink(home.photoUrl, (err) => {
-            if (err) console.log('Error deleting old image:', err);
-          });
-        }
-        home.photoUrl = images[0].path;
+        // Optional: Delete old image logic here if you want
+        home.photoUrl = images[0].path.replace(/\\/g, "/");
       }
 
-      // If a new PDF uploaded, delete old pdf and set new one
+      // 2. Handle PDF Update (CRITICAL FIX)
       if (pdfs && pdfs.length > 0) {
-        if (home.rulesPdfUrl) {
-          fs.unlink(home.rulesPdfUrl, (err) => {
-            if (err) console.log('Error deleting old pdf:', err);
-          });
-        }
-        home.rulesPdfUrl = pdfs[0].path;
+        // Save the new path with forward slashes
+        home.rulesPdfUrl = pdfs[0].path.replace(/\\/g, "/");
       }
 
       return home.save();
     })
     .then(result => {
-      console.log('Venue updated ', result);
+      console.log('Venue updated successfully');
       res.redirect('/host-home-list');
     })
     .catch(err => {
-      console.log('error while updating venue', err);
+      console.log('Error while updating venue', err);
       next(err);
     });
-}
+};
 
 exports.postDeleteHome = (req, res, next) => {
   const homeId = req.params.homeId;

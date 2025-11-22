@@ -17,7 +17,7 @@ const homeSchema = new mongoose.Schema({
   rating: { type: Number, default: 0 },
   photoUrl: String,
   facilities: { type: String, required: true }, // e.g., "DJ, Catering, Parking"
-  
+  rulesPdfUrl: { type: String },
   hostEmail: { type: String, required: true },
   host: {
     type: mongoose.Schema.Types.ObjectId,
