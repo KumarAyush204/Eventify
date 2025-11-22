@@ -1,0 +1,19 @@
+<% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+  <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-md mb-4">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M18 10A8 8 0 11 2 10a8 8 0 0116 0zm-9-3a1 1 0 112 0v4a1 1 0 01-2 0V7zm1 8a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm font-medium text-red-800">Please fix the following errors:</p>
+        <ul class="mt-2 text-sm text-red-700 list-disc list-inside space-y-1">
+          <% errors.forEach(error => { %>
+            <li><%= typeof error === 'object' ? error.msg : error %></li>
+          <% }) %>
+        </ul>
+      </div>
+    </div>
+  </div>
+<% } %>

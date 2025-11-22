@@ -1,0 +1,60 @@
+<%- include ('../partials/head') %>
+ 
+<body class="min-h-screen flex flex-col bg-red-50">
+  <!-- Top navbar -->
+  <%- include ('../partials/nav') %>
+
+  <!-- Main content -->
+  <main class="flex-grow px-6 py-8 text-red-900">
+    <!-- Heading -->
+    <h1 class="text-4xl font-bold text-red-700 mb-8 text-center">
+      Detailed Information of StayEasy home:
+    </h1> 
+
+    <!-- Full-width content section -->
+    <section class="bg-white rounded-2xl shadow-md p-8 flex flex-col lg:flex-row items-center lg:items-start gap-8 max-w-6xl mx-auto">
+      <!-- Image -->
+      
+        <img src="<%= home.photoUrl %>" alt="<%= home.houseName %>" 
+        class="w-full lg:w-1/2 h-80 object-cover rounded-lg shadow"
+      />
+
+      <!-- Text Content -->
+      <div class="w-full lg:w-1/2 space-y-4">
+        <h2 class="text-3xl font-bold text-red-700"><%= home.housename %></h2>
+
+        <p class="text-lg text-gray-700">
+          <span class="font-semibold text-red-700">Address:</span> <%= home.address %>
+        </p>
+
+        <p class="text-lg text-gray-700">
+          <span class="font-semibold text-red-700">House No.:</span> <%= home.housenumber %>
+        </p>
+
+        <p class="text-lg text-gray-700">
+          <span class="font-semibold text-red-700">Price/Night:</span> ₹<%= home.price %>
+        </p>
+
+        <p class="text-lg text-gray-700">
+          <span class="font-semibold text-red-700">Facilities:</span> <%= home.facilities %>
+        </p>
+
+        <p class="text-lg text-gray-700 flex items-center gap-2">
+          <span class="text-yellow-400"><i class="fas fa-star"></i></span>
+          <%= home.rating %> stars
+        </p>
+        <div class="mt-2">
+          <%- include ('../partials/favorites') %> </div>
+          <div class="mt-4">
+  <a href="/rules/<%= home._id %>" class="inline-flex items-center text-blue-600 hover:text-blue-800">
+    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+    </svg>
+    Download House Rules
+  </a>
+</div>
+        
+      </div>
+    </section>
+  </main>
+</body>

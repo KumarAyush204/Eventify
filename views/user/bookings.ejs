@@ -1,0 +1,61 @@
+<%- include ('../partials/head') %>
+<%- include ('../partials/nav') %>
+
+<div class="flex flex-col items-center mt-6 mb-8">
+  <h1 class="text-3xl font-bold text-red-800">My Event History</h1>
+</div>
+
+<div class="flex flex-wrap gap-6 justify-center px-4 mb-10">
+  <% if (bookings && bookings.length > 0) { %>
+    <% bookings.forEach(function(booking) { %>
+      <% if (booking.homeId) { %>
+        
+        <div class="bg-white shadow-md rounded-2xl p-5 w-64 hover:shadow-xl transition-shadow duration-300">
+          
+          <img
+            src="<%= booking.homeId.photoUrl || 'https://prod.rockmedialibrary.com/api/public/content/ff061825fa8e44bf8108de5c786c0062?v=4c4f7c7a' %>"
+            alt="Venue Image"
+            class="w-full h-40 object-cover rounded-lg mb-3"
+          />
+
+          <h3 class="text-red-700 font-bold text-lg mb-2 truncate"><%= booking.homeId.housename %></h3>
+          
+          <p class="text-sm text-gray-600 mb-1 truncate">
+            <span class="font-semibold text-gray-700">Address:</span> <%= booking.homeId.address %>
+          </p>
+
+          <div class="mb-1">
+             <p class="text-xs text-gray-500 font-semibold">Event Dates:</p>
+             <p class="text-sm text-gray-800 font-bold">
+               <%= new Date(booking.startDate).toLocaleDateString('en-GB') %> - 
+               <%= new Date(booking.endDate).toLocaleDateString('en-GB') %>
+             </p>
+          </div>
+
+          <p class="text-sm text-gray-600 mt-2">
+            <span class="font-semibold text-gray-700">Total Paid:</span> 
+            <span class="text-red-700 font-bold">₹<%= booking.totalPrice %></span>
+          </p>
+          
+          <p class="text-sm text-gray-600">
+             <span class="font-semibold text-gray-700">Guests:</span> <%= booking.guestCount %>
+          </p>
+
+          <a class="text-sm text-gray-600 mb-1 hover:text-red-600 block mt-2" href="/home-detail/<%= booking.homeId._id %>">View Venue Details...</a>
+          
+          <a href="/home-detail/<%= booking.homeId._id %>"
+            class="mt-3 bg-red-700 hover:bg-red-500 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition duration-300 flex items-center justify-center gap-2 w-full text-center">
+            Book Again
+          </a>
+        </div>
+
+      <% } %>
+    <% }) %>
+  <% } else { %>
+    <div class="text-center text-gray-600 mt-10">
+      <h3 class="text-xl font-semibold mb-2">No Bookings Found</h3>
+      <p class="text-sm">You haven’t booked any venues yet.</p>
+      <a href="/" class="text-red-600 font-semibold hover:underline">Browse Venues</a>
+    </div>
+  <% } %>
+</div>
