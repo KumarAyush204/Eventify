@@ -10,7 +10,7 @@ const { default: mongoose } = require('mongoose');
 const session = require('express-session');
 const MongoDbStore = require('connect-mongodb-session')(session);
 
-const DB_PATH = "mongodb://localhost:27017/StayEasy3";//||"mongodb+srv://khushiigupta16:Khushii01625@mernstack.jkbzphm.mongodb.net/airbnb?retryWrites=true&w=majority&appName=MernStack";
+const DB_PATH = "mongodb://localhost:27017/StayEasy3";
 const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(rootDir, 'views'));
