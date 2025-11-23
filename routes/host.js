@@ -3,6 +3,8 @@ const express=require('express')
 const hostRouter=express.Router();
 // const rootDir=require("../utils/pathUtil");
 const hostController=require("../controllers/hostController");
+const aiController = require('../controllers/aiController');
+hostRouter.post('/host/generate-rules-ai', aiController.generateRules);
 hostRouter.get('/host/bookings/:homeId', hostController.getHostBookings);
 hostRouter.get('/add-home',hostController.getHost)  
 hostRouter.post('/add-home',hostController.postHost)

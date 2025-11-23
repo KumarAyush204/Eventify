@@ -26,7 +26,8 @@
     "multer": "^2.0.2",
     "nodemailer": "^7.0.5",
     "openai": "^6.9.1",
-    "pdfjs-dist": "^2.16.105"
+    "pdfjs-dist": "^2.16.105",
+    "pdfkit": "^0.17.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.6",
