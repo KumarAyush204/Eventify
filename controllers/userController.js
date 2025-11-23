@@ -13,7 +13,7 @@ exports.getIndex = (req, res, next) => {
   Home.find().then((registeredHomes) => {
     res.render('index', {
       homes: registeredHomes,
-      pageTitle: "StayEasy Home",
+      pageTitle: "Eventify Home",
       isLoggedIn: req.isLoggedIn,
       user:req.session.user
     });
@@ -93,7 +93,7 @@ exports.getHomeDetails=(req,res,next)=>{
     }
     else{
     res.render('user/home-detail',{home: home,
-      pageTitle:"Home Detail",currentPage:"home",
+      pageTitle:"Venue Detail",currentPage:"home",
       isLoggedIn: req.isLoggedIn,
       user:req.session.user
     })}
