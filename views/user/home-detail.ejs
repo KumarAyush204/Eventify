@@ -2,85 +2,92 @@
 <%- include ('../partials/nav') %>
 
 <div class="bg-gradient-to-br from-red-50 via-white to-pink-50 min-h-screen py-10 px-4 flex items-center justify-center">
-  
-  <div class="bg-white shadow-lg rounded-2xl overflow-hidden w-full max-w-lg flex flex-col">
-    <div class="w-full md:w-1/2 relative group overflow-hidden h-80 md:h-auto">
+
+  <div class="bg-white shadow-md rounded-2xl p-5 w-full max-w-md flex flex-col hover:shadow-xl transition-shadow duration-300">
+
+    <!-- IMAGE -->
+    <div class="relative mb-3 group">
       <img 
         src="/<%= home.photoUrl %>" 
         alt="<%= home.housename %>" 
-        class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+        class="w-full h-56 object-cover rounded-lg transform group-hover:scale-105 transition-transform duration-500"
       />
-      
+
+      <span class="absolute bottom-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">
+        <%= home.venueType || 'Venue' %>
+      </span>
+
       <div class="absolute top-3 right-3 bg-white px-2 py-1 rounded-full shadow text-sm font-semibold flex items-center gap-1">
         <i class="fas fa-star text-yellow-400"></i>
         <%= home.rating %>
       </div>
-      
-      <div class="absolute bottom-3 left-3 bg-black/60 text-white px-2 py-1 rounded text-xs uppercase font-bold tracking-wide backdrop-blur-sm">
-        <%= home.venueType || 'Venue' %>
-      </div>
     </div>
 
-    <div class="p-8 w-full md:w-1/2 flex flex-col justify-center">
-      
-      <h1 class="text-3xl font-bold text-red-700 mb-4"><%= home.housename %></h1>
-      
-      <div class="space-y-3 mb-6">
-        
-        <p class="text-base text-gray-600">
-          <span class="font-semibold text-gray-700"><i class="fas fa-map-marker-alt mr-2 w-5 text-center"></i>Address:</span> <%= home.address %>
-        </p>
+    <!-- TITLE -->
+    <h3 class="text-red-700 font-bold text-xl mb-2"><%= home.housename %></h3>
 
-        <p class="text-base text-gray-600">
-          <span class="font-semibold text-gray-700"><i class="fas fa-users mr-2 w-5 text-center"></i>Capacity:</span> <%= home.capacity %> Guests
-        </p>
+    <!-- DETAILS -->
+    <div class="space-y-2 mb-4">
 
-        <p class="text-base text-gray-600">
-          <span class="font-semibold text-gray-700"><i class="fas fa-tag mr-2 w-5 text-center"></i>Price/Day:</span> ₹<%= home.price %>
-        </p>
+      <p class="text-sm text-gray-600">
+        <span class="font-semibold text-gray-700">Address:</span> <%= home.address %>
+      </p>
 
-        <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 mt-2">
-          <p class="text-sm text-gray-500 italic">
-            <span class="font-semibold text-gray-700 not-italic block mb-1">Features:</span> 
-            <%= home.facilities %>
-          </p>
-        </div>
+      <p class="text-sm text-gray-600">
+        <span class="font-semibold text-gray-700">Capacity:</span> <%= home.capacity %> Guests
+      </p>
+
+      <p class="text-sm text-gray-600">
+        <span class="font-semibold text-gray-700">Price/Day:</span> ₹<%= home.price %>
+      </p>
+
+      <div class="pt-3 border-t border-gray-100">
+        <p class="text-sm text-gray-600">
+          <span class="font-semibold text-gray-700">Features:</span> 
+          <%= home.facilities %>
+        </p>
       </div>
 
-      <div class="mt-auto space-y-3">
-        
-        <% if (typeof user === 'undefined' || !user || user.usertype !== 'host') { %>
-          <a href="/book/<%= home._id %>" 
-             class="block w-full bg-red-600 text-white font-semibold py-3 rounded-lg text-center shadow hover:bg-red-700 transition transform hover:-translate-y-0.5">
-             Book This Venue
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="flex flex-col gap-3 mt-auto">
+
+      <% if (!user || user.usertype !== 'host') { %>
+        <a href="/book/<%= home._id %>" 
+           class="block w-full bg-red-700 text-white font-semibold py-2 rounded-lg text-center hover:bg-red-800 shadow-md transition duration-300">
+          Book For Event
+        </a>
+      <% } %>
+
+      <div class="flex gap-3">
+
+        <% if (!user || user.usertype !== 'host') { %>
+          <form action="/favourites" method="POST" class="flex-1">
+            <input type="hidden" name="id" value="<%= home._id %>">
+            <button 
+              type="submit" 
+              class="w-full bg-white border border-gray-300 text-gray-700 font-semibold py-2 rounded-lg hover:bg-gray-50 transition duration-300 text-sm flex items-center justify-center gap-1">
+              <i class="far fa-heart text-red-500"></i> Save
+            </button>
+          </form>
+        <% } %>
+
+        <% if (home.rulesPdfUrl) { %>
+          <a href="/<%= home.rulesPdfUrl %>" target="_blank"
+             class="flex-1 bg-white border border-blue-200 text-blue-600 font-semibold py-2 rounded-lg hover:bg-blue-50 transition duration-300 text-center text-sm flex items-center justify-center gap-1">
+            <i class="fas fa-file-pdf"></i> Rules
           </a>
         <% } %>
 
-        <div class="flex gap-3">
-          <% if (typeof user === 'undefined' || !user || user.usertype !== 'host') { %>
-            <form action="/favourites" method="POST" class="flex-1">
-              <input type="hidden" name="id" value="<%= home._id %>">
-              <button type="submit" class="w-full bg-white border border-red-200 text-red-700 font-semibold py-2.5 rounded-lg hover:bg-red-50 transition flex items-center justify-center gap-2 shadow-sm">
-                <i class="far fa-heart"></i> Favorites
-              </button>
-            </form>
-          <% } %>
-
-          <% if (home.rulesPdfUrl) { %>
-            <a href="/<%= home.rulesPdfUrl %>" target="_blank" class="flex-1 bg-white border border-blue-200 text-blue-600 font-semibold py-2.5 rounded-lg hover:bg-blue-50 transition text-center flex items-center justify-center gap-2 shadow-sm">
-              <i class="fas fa-file-pdf"></i> Rules
-            </a>
-          <% } %>
-        </div>
-
       </div>
-
     </div>
+
   </div>
 </div>
 
+<!-- CHAT WIDGET (unchanged) -->
 <div id="chat-widget" class="fixed bottom-5 right-5 z-50 font-sans">
-  
   <div id="chat-window" class="hidden bg-white w-80 h-96 rounded-2xl shadow-2xl flex flex-col border border-gray-200 mb-4 overflow-hidden transition-all transform origin-bottom-right duration-300">
     <div class="bg-red-700 text-white p-4 flex justify-between items-center shadow-md">
       <h3 class="font-bold text-sm flex items-center gap-2"><i class="fas fa-robot"></i> Ask about <%= home.housename %></h3>
@@ -111,30 +118,38 @@
 
   function toggleChat() {
     chatWindow.classList.toggle('hidden');
-    if (!chatWindow.classList.contains('hidden')) userInput.focus();
+    if (!chatWindow.classList.contains('hidden')) {
+      userInput.focus();
+    }
   }
 
   async function sendMessage() {
     const message = userInput.value.trim();
     if (!message) return;
+
     userInput.disabled = true;
     sendBtn.disabled = true;
+
     addMessage(message, 'user');
     userInput.value = '';
+
     const typingId = addMessage('Thinking...', 'bot', true);
 
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ homeId: homeId, userMessage: message })
+        body: JSON.stringify({ homeId, userMessage: message })
       });
+
       const data = await response.json();
       removeMessage(typingId);
       addMessage(data.reply, 'bot');
-    } catch (error) {
+
+    } catch {
       removeMessage(typingId);
       addMessage("Error connecting to AI.", 'bot');
+
     } finally {
       userInput.disabled = false;
       sendBtn.disabled = false;
@@ -145,12 +160,14 @@
   function addMessage(text, sender, isTyping = false) {
     const div = document.createElement('div');
     div.id = Date.now();
+
     if (sender === 'user') {
       div.className = "bg-red-600 text-white p-3 rounded-lg rounded-tr-none shadow-sm self-end ml-auto max-w-[85%]";
     } else {
       div.className = "bg-white text-gray-800 p-3 rounded-lg rounded-tl-none shadow-sm border border-gray-200 mr-auto max-w-[85%]";
       if (isTyping) div.classList.add('italic', 'text-gray-500');
     }
+
     div.innerHTML = text.replace(/\n/g, '<br>');
     messagesContainer.appendChild(div);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -162,7 +179,7 @@
     if (el) el.remove();
   }
 
-  userInput.addEventListener('keypress', function (e) {
+  userInput.addEventListener('keypress', e => {
     if (e.key === 'Enter') sendMessage();
   });
 </script>

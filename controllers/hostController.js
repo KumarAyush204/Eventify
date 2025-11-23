@@ -154,7 +154,7 @@ exports.postEditHome = async (req, res, next) => {
 
     await home.save();
     console.log('Venue updated successfully');
-    res.redirect('/host-home-list');
+    res.redirect('/home-list');
 
   } catch (err) {
     console.log('Error while updating venue:', err);

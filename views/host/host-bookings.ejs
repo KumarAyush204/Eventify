@@ -4,16 +4,42 @@
 <div class="bg-gray-50 min-h-screen py-10 px-4">
   <div class="max-w-6xl mx-auto">
     
-    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+    <div class="bg-gray-50 min-h-screen py-10 px-4">
+  <div class="max-w-6xl mx-auto">
+    
+    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-6 gap-4">
+      
       <div>
         <h1 class="text-3xl font-bold text-gray-800">Guest List</h1>
-        <p class="text-gray-500 mt-1">
+        <p class="text-gray-500 text-sm mt-1">
           Property: <span class="font-bold text-red-700"><%= home.housename %></span>
         </p>
       </div>
-      <a href="/host-home-list" class="text-red-600 hover:text-red-800 font-semibold flex items-center gap-2">
-        <i class="fas fa-arrow-left"></i> Back to Properties
-      </a>
+
+      <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+        
+        <form action="/host/report/<%= home._id %>" method="GET" class="flex items-center gap-2 bg-white p-2 rounded-lg border border-gray-300 shadow-sm w-full sm:w-auto">
+          
+          <div class="flex flex-col">
+            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">From</label>
+            <input type="date" name="startDate" required class="text-xs border border-gray-200 rounded px-2 py-1 outline-none focus:border-red-500 text-gray-700">
+          </div>
+
+          <div class="flex flex-col">
+            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">To</label>
+            <input type="date" name="endDate" required class="text-xs border border-gray-200 rounded px-2 py-1 outline-none focus:border-red-500 text-gray-700">
+          </div>
+
+          <button type="submit" class="mt-auto bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-1.5 px-4 rounded shadow-md transition flex items-center gap-2 h-[26px] whitespace-nowrap">
+            <i class="fas fa-file-invoice"></i> Generate
+          </button>
+        </form>
+
+        <a href="/host-home-list" class="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 text-xs font-bold py-3 px-4 rounded-lg shadow-sm flex items-center justify-center gap-2 transition">
+          <i class="fas fa-arrow-left"></i> Back
+        </a>
+
+      </div>
     </div>
 
     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">

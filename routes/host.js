@@ -4,6 +4,8 @@ const hostRouter=express.Router();
 // const rootDir=require("../utils/pathUtil");
 const hostController=require("../controllers/hostController");
 const aiController = require('../controllers/aiController');
+const reportController = require('../controllers/reportController');
+hostRouter.get('/host/report/:homeId', reportController.generateVenueReport);
 hostRouter.post('/host/generate-rules-ai', aiController.generateRules);
 hostRouter.get('/host/bookings/:homeId', hostController.getHostBookings);
 hostRouter.get('/add-home',hostController.getHost)  

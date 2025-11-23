@@ -1,3 +1,7 @@
-<form action="/favourites" method="POST">
-          <button type="submit" class="bg-green-300 p-2 hover:bg-green-500">Add to Favorites</button><input type="hidden" name="id" value="<%= home._id %>">
-        </form>
+<form action="/favourites" method="POST" class="w-full">
+  <input type="hidden" name="id" value="<%= home._id %>">
+  <button type="submit" class="w-full bg-white border border-red-200 text-red-600 font-semibold py-2.5 px-4 rounded-lg hover:bg-red-50 transition duration-300 flex items-center justify-center gap-2 shadow-sm group text-sm md:text-base active:scale-95">
+    <i class="far fa-heart group-hover:scale-110 transition-transform"></i> 
+    <span>Add to Favorites</span>
+  </button>
+</form>
