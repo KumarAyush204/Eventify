@@ -118,38 +118,40 @@
 
   function toggleChat() {
     chatWindow.classList.toggle('hidden');
-    if (!chatWindow.classList.contains('hidden')) {
-      userInput.focus();
-    }
+    if (!chatWindow.classList.contains('hidden')) userInput.focus();
   }
 
   async function sendMessage() {
     const message = userInput.value.trim();
     if (!message) return;
 
+    // 1. Disable input while sending
     userInput.disabled = true;
     sendBtn.disabled = true;
 
+    // 2. Add User Message
     addMessage(message, 'user');
     userInput.value = '';
 
+    // 3. Add Typing Indicator
     const typingId = addMessage('Thinking...', 'bot', true);
 
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ homeId, userMessage: message })
+        body: JSON.stringify({ homeId: homeId, userMessage: message })
       });
-
+      
       const data = await response.json();
+      
+      // 4. Remove Typing & Add Bot Response
       removeMessage(typingId);
       addMessage(data.reply, 'bot');
 
-    } catch {
+    } catch (error) {
       removeMessage(typingId);
       addMessage("Error connecting to AI.", 'bot');
-
     } finally {
       userInput.disabled = false;
       sendBtn.disabled = false;
@@ -159,19 +161,23 @@
 
   function addMessage(text, sender, isTyping = false) {
     const div = document.createElement('div');
-    div.id = Date.now();
-
+    // FIX: Add a random number to ensure the ID is always unique
+    const id = 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    div.id = id;
+    
     if (sender === 'user') {
       div.className = "bg-red-600 text-white p-3 rounded-lg rounded-tr-none shadow-sm self-end ml-auto max-w-[85%]";
     } else {
       div.className = "bg-white text-gray-800 p-3 rounded-lg rounded-tl-none shadow-sm border border-gray-200 mr-auto max-w-[85%]";
       if (isTyping) div.classList.add('italic', 'text-gray-500');
     }
-
-    div.innerHTML = text.replace(/\n/g, '<br>');
+    
+    // Allow line breaks
+    div.innerHTML = text.replace(/\n/g, '<br>'); 
+    
     messagesContainer.appendChild(div);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    return div.id;
+    return id;
   }
 
   function removeMessage(id) {
@@ -179,7 +185,7 @@
     if (el) el.remove();
   }
 
-  userInput.addEventListener('keypress', e => {
+  userInput.addEventListener('keypress', function (e) {
     if (e.key === 'Enter') sendMessage();
   });
 </script>

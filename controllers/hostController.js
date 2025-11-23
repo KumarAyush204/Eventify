@@ -59,7 +59,7 @@ exports.postHost = async (req, res, next) => {
 
     await home.save();
     console.log('Venue added successfully');
-    res.redirect('/host-home-list');
+    res.redirect('/home-list');
 
   } catch(err) {
     console.log('Error adding venue:', err);
