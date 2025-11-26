@@ -109,23 +109,37 @@ exports.postDelFavList=async(req,res,next)=>{
   }
   res.redirect("/favourites");
 };
-exports.getHouseRules = [
-  (req, res, next) => {
+exports.getHouseRules = async (req, res, next) => {
+  try {
     if (!req.session.isLoggedIn) {
       return res.redirect("/login");
     }
-    next();
-  },
-  (req, res) => {
-    const filePath = path.join(rootDir, 'uploads', 'rules', 'HouseRules.pdf');
-    res.download(filePath, 'HouseRules.pdf', (err) => {
+
+    const homeId = req.params.homeId;
+    const home = await Home.findById(homeId);
+
+    // Check if venue exists and has a rule file
+    if (!home || !home.rulesPdfUrl) {
+      console.log("No rules found for this venue.");
+      return res.redirect('back'); // Or show an error page
+    }
+
+    // Construct the full path using the database value
+    // home.rulesPdfUrl is stored like "uploads/rules/filename.pdf"
+    const filePath = path.join(rootDir, home.rulesPdfUrl);
+
+    res.download(filePath, `HouseRules-${home.housename}.pdf`, (err) => {
       if (err) {
         console.error('Error downloading file:', err);
-        res.status(404).send('File not found');
+        res.status(404).send('Rules file not found on server');
       }
     });
-  } 
-];
+
+  } catch (err) {
+    console.error("Error in getHouseRules:", err);
+    next(err);
+  }
+};
 
 exports.getbookHouse=async (req,res,next)=>{
     if (!req.isLoggedIn) {
@@ -246,16 +260,17 @@ exports.postbookHouse = async (req, res, next) => {
     await transporter.sendMail(mailOptions);
 
     // 7. Redirect to Payment or Success Page
-    res.render("user/payment", {
-      pageTitle: "Payment",
-      currentPage: "payment",
-      isLoggedIn: req.isLoggedIn, 
-      user: req.session.user,
-      booking: booking // Pass booking details if needed for receipt
-    });
-
+    // res.render("user/bookings", {
+    //   pageTitle: "Payment",
+    //   currentPage: "payment",
+    //   isLoggedIn: req.isLoggedIn, 
+    //   user: req.session.user,
+    //   booking: booking // Pass booking details if needed for receipt
+    // });
+res.redirect('/bookings');
   } catch (err) {
     console.error("Booking Error:", err);
-    res.status(500).send("Booking failed due to server error.");
+    res.redirect('/bookings');
+    // res.status(500).send("Booking failed due to server error.");
   }
 };
