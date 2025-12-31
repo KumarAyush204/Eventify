@@ -13,6 +13,7 @@ userRouter.get('/favourites',userController.getFavoriteList)
 userRouter.post('/favourites',userController.postAddToFav)
 userRouter.post('/favourites/delete/:homeId',userController.postDelFavList)
 userRouter.post('/api/chat', chatController.chatWithVenue);
+
 module.exports=userRouter; 
 userRouter.get("/rules/:homeId",userController.getHouseRules);
 
